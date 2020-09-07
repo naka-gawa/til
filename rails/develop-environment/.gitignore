@@ -1,0 +1,10 @@
+/*
+
+!/.gitignore
+!/Dockerfile
+!/docker-compose.yaml
+!/Gemfile*
+!/entrypoint.sh
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
