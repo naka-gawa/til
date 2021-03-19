@@ -1,0 +1,5 @@
+require_relative 'job'
+require 'resque/tasks'
+require 'resque'
+
+Resque.redis="redis"
