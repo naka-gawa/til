@@ -52,7 +52,7 @@ sudo apt update -y && \
   sudo apt full-upgrade && \
   sudo rpi-update && \
   sudo apt-get --purge remove vim-common vim-tiny -y && \
-  sudo apt-get -y install vim autoconf automake libtool curl unzip gcc make libseccomp2 libseccomp-dev btrfs-progs libbtrfs-dev containerd
+  sudo apt-get -y install vim autoconf automake libtool curl unzip gcc make libseccomp2 libseccomp-dev btrfs-progs libbtrfs-dev containerd golang-cfssl
 ```
 
 一緒に containerd もインストールしちゃう
@@ -98,6 +98,19 @@ sudo tee /etc/hosts <<EOF
 10.1.101.2	k8s-worker-2
 10.1.101.3	k8s-worker-3
 EOF
+```
+
+## kubectl のインストール(Masterのみ)
+
+```
+wget https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/arm/kubectl && \
+  chmod +x kubectl && \
+  sudo mv kubectl /usr/local/bin
+
+mkdir k8s && cd k8s
+wget https://raw.githubusercontent.com/naka-gawa/til/master/container/hardway/raspberrypi/generate-cert.sh
+wget https://raw.githubusercontent.com/naka-gawa/til/master/container/hardway/raspberrypi/generate-kubeconfig.sh
+chmod u+x *.sh
 ```
 
 ## 証明書と kubeconfig の生成
@@ -161,6 +174,22 @@ kubectl config set-cluster kubernetes-the-hard-way \
   --embed-certs=true \
   --server=https://${MASTER_ADDRESS}:6443 \
   --kubeconfig=kube-proxy.kubeconfig
+```
+
+- できた証明書とkubeconfig を各 worker に送る
+
+```
+ssh admin@10.1.101.2 mkdir k8s
+scp ~/k8s/cert/k8s-worker-2*.pem admin@10.1.101.2:~/k8s
+scp ~/k8s/kubeconfig/k8s-worker-2*.kubeconfig admin@10.1.101.2:~/k8s
+scp ~/k8s/kubeconfig/kube-proxy.kubeconfig admin@10.1.101.2:~/k8s
+```
+
+```
+ssh admin@10.1.101.3 mkdir k8s
+scp ~/k8s/cert/k8s-worker-3*.pem admin@10.1.101.3:~/k8s
+scp ~/k8s/kubeconfig/k8s-worker-3*.kubeconfig admin@10.1.101.3:~/k8s
+scp ~/k8s/kubeconfig/kube-proxy.kubeconfig admin@10.1.101.3:~/k8s
 ```
 
 ref.[how-to-create-cluster-logical-hardway](https://github.com/CyberAgentHack/home-kubernetes-2020/tree/master/how-to-create-cluster-logical-hardway)
