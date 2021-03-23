@@ -1,1 +1,1 @@
-YYYYMMDD Daily Report
+Daily Report
