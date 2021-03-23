@@ -36,8 +36,10 @@
 ```
 sudo diskutil umountDisk /dev/disk2 && \
   sudo dd bs=1m if=2021-01-11-raspios-buster-armhf-lite.img of=/dev/rdisk2 conv=sync && \
+  sleep 10 && \
   touch /Volumes/boot/ssh && \
-  sed -i -e 's/.$/ cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory ip=10.1.101.1::10.1.101.254:255.255.255.0::eth0:off/g' /Volumes/boot/cmd.txt && \
+  sed -i -e 's/.$/ cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory' /Volumes/boot/cmdline.txt && \
+  sudo rm -rf /Volumes/boot/cmdline.txt-e && \
   sudo diskutil umountDisk /dev/disk2
 ```
 
@@ -45,30 +47,7 @@ address は node 毎に変更する
 
 ## 初期セットアップ
 
-- Package Install (全 node 共通)
-
-```
-sudo apt update -y && \
-  sudo apt full-upgrade && \
-  sudo rpi-update && \
-  sudo apt-get --purge remove vim-common vim-tiny -y && \
-  sudo apt-get -y install vim autoconf automake libtool curl unzip gcc make libseccomp2 libseccomp-dev btrfs-progs libbtrfs-dev containerd golang-cfssl
-```
-
-一緒に containerd もインストールしちゃう
-
-- Golang Setup
-
-```
-wget https://golang.org/dl/go1.15.8.linux-armv6l.tar.gz && \
-  sudo tar -C /usr/local -xzf go1.15.8.linux-armv6l.tar.gz && \
-  echo 'PATH="$PATH:/usr/local/go/bin"' | tee -a $HOME/.profile && \
-  source $HOME/.profile && \
-  echo "export GOPATH=$(go env GOPATH)" | tee -a $HOME/.profile && \
-  source $HOME/.profile
-```
-
-- Settings Other
+- Initial Setup
 
 hostname と ip address は node 毎に読み替える
 
@@ -84,20 +63,41 @@ sudo adduser admin && \
 export NODEIP=10.1.101.1
 export HOSTNAME=k8s-master-1
 
-sudo tee /etc/dhcpcd.conf <<EOF
-interface eth0
-static ip_address=${NODEIP}/24
-static routers=10.1.101.254
-static domain_name_servers=8.8.8.8
-EOF
+sudo sh -c "echo interface eth0 >> /etc/dhcpcd.conf"
+sudo sh -c "echo static ip_address=${NODEIP}/24 >> /etc/dhcpcd.conf"
+sudo sh -c "echo static routers=10.1.101.254 >> /etc/dhcpcd.conf"
+sudo sh -c "echo static domain_name_servers=8.8.8.8 >> /etc/dhcpcd.conf"
 
-sudo tee /etc/hosts <<EOF
+sudo sh -c "echo 127.0.0.1   ${HOSTNAME} >> /etc/hosts"
+sudo sh -c "echo 10.1.101.1  k8s-master-1 >> /etc/hosts"
+sudo sh -c "echo 10.1.101.2  k8s-worker-2 >> /etc/hosts"
+sudo sh -c "echo 10.1.101.3  k8s-worker-3 >> /etc/hosts"
 
-127.0.0.1	${HOSTNAME}
-10.1.101.1	k8s-master-1
-10.1.101.2	k8s-worker-2
-10.1.101.3	k8s-worker-3
-EOF
+sudo sh -c "echo ${HOSTNAME} > /etc/hostname"
+
+sudo shutdown -h now
+```
+
+- Package Install (全 node 共通)
+
+```
+sudo apt update -y && \
+  sudo apt full-upgrade -y && \
+  sudo apt-get --purge remove vim-common vim-tiny -y && \
+  sudo apt-get -y install vim autoconf automake libtool curl unzip gcc make libseccomp2 libseccomp-dev btrfs-progs libbtrfs-dev runc golang-cfssl
+```
+
+一緒に runc もインストールしちゃう
+
+- Golang Setup
+
+```
+wget https://golang.org/dl/go1.15.8.linux-armv6l.tar.gz && \
+  sudo tar -C /usr/local -xzf go1.15.8.linux-armv6l.tar.gz && \
+  echo 'PATH="$PATH:/usr/local/go/bin"' | tee -a $HOME/.profile && \
+  source $HOME/.profile && \
+  echo "export GOPATH=$(go env GOPATH)" | tee -a $HOME/.profile && \
+  source $HOME/.profile
 ```
 
 ## kubectl のインストール(Masterのみ)
