@@ -38,7 +38,7 @@ sudo diskutil umountDisk /dev/disk2 && \
   sudo dd bs=1m if=2021-01-11-raspios-buster-armhf-lite.img of=/dev/rdisk2 conv=sync && \
   sleep 10 && \
   touch /Volumes/boot/ssh && \
-  sed -i -e 's/.$/ cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory' /Volumes/boot/cmdline.txt && \
+  sed -i -e 's/.$/h cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory' /Volumes/boot/cmdline.txt && \
   sudo rm -rf /Volumes/boot/cmdline.txt-e && \
   sudo diskutil umountDisk /dev/disk2
 ```
