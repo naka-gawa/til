@@ -53,10 +53,18 @@ sudo mv crictl kubelet /usr/local/bin/
 containerd をインストールする
 
 ```
-go get -v github.com/containerd/containerd && \
-  cd $GOPATH/src/github.com/containerd/containerd && \
-  make -j`nproc` && \
-  sudo env PATH="$PATH" make install
+curl -fsSL https://download.docker.com/linux/raspbian/gpg | sudo apt-key add -
+cat <<EOF | sudo tee /etc/apt/sources.list
+deb http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi
+# Uncomment line below then 'apt-get update' to enable 'apt-get source'
+#deb-src http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi
+deb https://download.docker.com/linux/raspbian buster stable
+EOF
+
+sudo apt update -y && \
+  sudo apt install -y containerd.io && \
+  sudo systemctl enable --now containerd.service
+containerd --version
 ```
 
 Pod Network を定義する
