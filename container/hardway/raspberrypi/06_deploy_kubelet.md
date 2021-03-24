@@ -22,6 +22,7 @@ sudo mkdir -p \
 
 sudo cp -ai ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo cp -ai ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+sudo cp -ai ca.pem /var/lib/kubernetes/
 ```
 
 ## binary 取得 (Masterのみ)
