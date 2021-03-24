@@ -180,6 +180,7 @@ kubectl config set-cluster kubernetes-the-hard-way \
 
 ```
 ssh admin@10.1.101.2 mkdir k8s && \
+  scp ~/k8s/cert/ca.pem admin@10.1.101.2:~/k8s && \
   scp ~/k8s/cert/k8s-worker-2*.pem admin@10.1.101.2:~/k8s && \
   scp ~/k8s/kubeconfig/k8s-worker-2*.kubeconfig admin@10.1.101.2:~/k8s && \
   scp ~/k8s/kubeconfig/kube-proxy.kubeconfig admin@10.1.101.2:~/k8s
@@ -187,6 +188,7 @@ ssh admin@10.1.101.2 mkdir k8s && \
 
 ```
 ssh admin@10.1.101.3 mkdir k8s && \
+  scp ~/k8s/cert/ca.pem admin@10.1.101.3:~/k8s && \
   scp ~/k8s/cert/k8s-worker-3*.pem admin@10.1.101.3:~/k8s && \
   scp ~/k8s/kubeconfig/k8s-worker-3*.kubeconfig admin@10.1.101.3:~/k8s && \
   scp ~/k8s/kubeconfig/kube-proxy.kubeconfig admin@10.1.101.3:~/k8s

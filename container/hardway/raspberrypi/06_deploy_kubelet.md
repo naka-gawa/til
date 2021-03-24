@@ -22,6 +22,7 @@ sudo mkdir -p \
 
 sudo cp -ai ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 sudo cp -ai ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+sudo cp -ai ca.pem /var/lib/kubernetes/
 ```
 
 ## binary 取得 (Masterのみ)
@@ -174,7 +175,15 @@ sudo systemctl daemon-reload && \
 - systemctl status kubelet の起動状態を確認する
 
 ```
-
+systemctl status kubelet.service
+● kubelet.service - Kubernetes Kubelet
+   Loaded: loaded (/etc/systemd/system/kubelet.service; enabled; vendor preset: enabled)
+   Active: active (running) since Wed 2021-03-24 19:16:43 GMT; 4s ago
+     Docs: https://github.com/kubernetes/kubernetes
+ Main PID: 16334 (kubelet)
+    Tasks: 14 (limit: 2063)
+   Memory: 9.9M
+   CGroup: /system.slice/kubelet.service
 ```
 
 ref.[how-to-create-cluster-logical-hardway](https://github.com/CyberAgentHack/home-kubernetes-2020/tree/master/how-to-create-cluster-logical-hardway)
