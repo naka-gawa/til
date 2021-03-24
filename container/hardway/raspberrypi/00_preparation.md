@@ -84,7 +84,7 @@ sudo shutdown -h now
 sudo apt update -y && \
   sudo apt full-upgrade -y && \
   sudo apt-get --purge remove vim-common vim-tiny -y && \
-  sudo apt-get -y install vim autoconf automake libtool curl unzip gcc make libseccomp2 libseccomp-dev btrfs-progs libbtrfs-dev runc golang-cfssl
+  sudo apt-get -y install vim autoconf automake libtool curl unzip gcc make libseccomp2 libseccomp-dev btrfs-progs libbtrfs-dev runc golang-cfssl socat conntrack ipset
 ```
 
 一緒に runc もインストールしちゃう
