@@ -25,7 +25,7 @@ sudo cp -ai ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 sudo cp -ai ca.pem /var/lib/kubernetes/
 ```
 
-## binary 取得 (Masterのみ)
+## binary 取得
 
 - binary 取得
 
