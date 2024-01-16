@@ -81,4 +81,37 @@ ok      github.com/naka-gawa/tiltdd/tdd 0.449s
 
 #### Step.4 リファクタリング
 
+```golang
+package integers
 
+import (
+    "fmt"
+    "testing"
+)
+
+func TestAdder(t *testing.T) {
+    sum := Add(2, 2)
+    expected := 4
+
+    if sum != expected {
+        t.Errorf("expected '%d' but got '%d'", expected, sum)
+    }
+}
+
+func ExampleAdd() {
+    sum := Add(1, 5)
+    fmt.Println(sum)
+    // Output: 6
+}
+```
+
+```output
+╰─ go test -v
+=== RUN   TestAdder
+--- PASS: TestAdder (0.00s)
+=== RUN   ExampleAdd
+--- PASS: ExampleAdd (0.00s)
+PASS
+ok      github.com/naka-gawa/tiltdd/tdd 0.127s
+
+```
