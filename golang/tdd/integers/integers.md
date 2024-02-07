@@ -81,6 +81,8 @@ ok      github.com/naka-gawa/tiltdd/tdd 0.449s
 
 #### Step.4 リファクタリング
 
+Example の追加とともに godoc でどの様に見えるかの挙動の確認
+
 ```golang
 package integers
 
