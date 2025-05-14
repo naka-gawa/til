@@ -37,7 +37,7 @@ jobs:
         with:
           ## name は input で指定した値を使う
           ## input.filename + ".json" でファイル名を指定
-          name: ${{ github.event.inputs.filename }} + ".json"
+          name: "${{ github.event.inputs.filename }}.json"
           json: '{"key":"test", "value": "${{ github.event.inputs.testvalue }}"}'
           dir: "workflowtest/"
       - name: create pr
