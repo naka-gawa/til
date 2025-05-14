@@ -32,4 +32,4 @@ jobs:
           title: "auto update"
           body: "auto update dayo!"
           commit-message: "Update!"
-          base: main
+          base: master
