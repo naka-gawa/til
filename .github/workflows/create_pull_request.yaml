@@ -29,14 +29,20 @@ jobs:
             echo "This workflow run is only allowed to `naka-gawa`. "
             exit 1
           fi
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
       - name: create-json
         id: create-json
         uses: jsdaniell/create-json@v1.2.3
         with:
-          ## name は input で指定した値を使う
-          ## input.filename + ".json" でファイル名を指定
           name: "${{ github.event.inputs.filename }}.json"
           json: '{"key":"test", "value": "${{ github.event.inputs.testvalue }}"}'
           dir: "workflowtest/"
