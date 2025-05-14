@@ -20,6 +20,8 @@ jobs:
   sample:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
       - name: change
         run: |
           echo "sample" >> sample.txt
