@@ -1,4 +1,4 @@
-name: create pull request
+name: create pull request to add jsonfile
 
 on:
   workflow_dispatch:
@@ -12,19 +12,34 @@ on:
       branch:
         description: "PRを作成するブランチ名"
         required: true
-      base:
-        description: "マージ先のブランチ名"
+      filename:
+        description: "jsonファイル名"
+        required: true
+      testvalue:
+        description: "jsonのtest value"
         required: true
 
 jobs:
   sample:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Actor
+        run: |
+          if [[ "${{ github.actor }}" != "naka-gawa" ]]; then
+            echo "This workflow run is only allowed to `naka-gawa`. "
+            exit 1
+          fi
       - name: checkout
         uses: actions/checkout@v4
-      - name: change
-        run: |
-          echo "sample" >> sample.txt
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          ## name は input で指定した値を使う
+          ## input.filename + ".json" でファイル名を指定
+          name: ${{ github.event.inputs.filename }} + ".json"
+          json: '{"key":"test", "value": "${{ github.event.inputs.testvalue }}"}'
+          dir: "workflowtest/"
       - name: create pr
         uses: peter-evans/create-pull-request@v7
         with:
