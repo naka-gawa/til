@@ -1,0 +1,33 @@
+name: create pull request
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "PRのタイトル"
+        required: true
+      body:
+        description: "PRの本文"
+        required: true
+      branch:
+        description: "PRを作成するブランチ名"
+        required: true
+      base:
+        description: "マージ先のブランチ名"
+        required: true
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - name: change
+        run: |
+          echo "sample" >> sample.txt
+      - name: create pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: "sample"
+          title: "auto update"
+          body: "auto update dayo!"
+          commit-message: "Update!"
+          base: main
